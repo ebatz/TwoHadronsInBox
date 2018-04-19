@@ -523,7 +523,7 @@ void BoxQuantization::setup_basis()
    // keep a reference to the qSqFromEcm function for each channel
  for (auto mbIt = m_boxes.begin(); mbIt != m_boxes.end(); ++mbIt) {
    if (mbIt->second >= m_qcmsqFcts.size()) {
-     std::function<double(double)> fHand = std::bind(&EcmTransform::getQcmsqOverMrefsq, mbIt->first->getEcmTransform(), std::placeholders::_1);
+     std::function<double(double)> fHand = std::bind(&EcmTransform::getQcmsqOverMrefsqFromEcm, mbIt->first->getEcmTransform(), std::placeholders::_1);
      m_qcmsqFcts.push_back(fHand);}}
 }
 
