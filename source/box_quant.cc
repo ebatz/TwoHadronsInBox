@@ -292,6 +292,7 @@ void BoxQuantization::clear()
  m_Lmaxes.clear();
  m_masses1.clear();
  m_masses2.clear();
+ m_qcmsqFcts.clear();
  for (list<pair<BoxMatrix*,uint> >::iterator it=m_boxes.begin();it!=m_boxes.end();it++)
     delete it->first;
  m_boxes.clear();
@@ -462,6 +463,7 @@ string BoxQuantization::getLGIrrepParityFlip()
 // *      - loop over allowed values of S  (|s1-s2|,...,s1+s2)
 // *           - create box matrix for each
 // *           - each box matrix creates the n J L basis states
+// *      - keep a reference to the Ecmtransform's qSq function
 
 // *   Basis states in the current block are labelled by
 // *      irrep occurrence  J L S channel_index
@@ -517,6 +519,12 @@ void BoxQuantization::setup_basis()
     throw(std::invalid_argument(string("Null basis in BoxQuantization after Kmatrix exclusions: need K elements follow: ")+kstr));}
  for (set<BoxQuantBasisState>::iterator it=exclusions.begin();it!=exclusions.end();it++){
     m_basis.erase(*it);}
+
+   // keep a reference to the qSqFromEcm function for each channel
+ for (auto mbIt = m_boxes.begin(); mbIt != m_boxes.end(); ++mbIt) {
+   if (mbIt->second >= m_qcmsqFcts.size()) {
+     std::function<double(double)> fHand = std::bind(&EcmTransform::getQcmsqOverMrefsq, mbIt->first->getEcmTransform(), std::placeholders::_1);
+     m_qcmsqFcts.push_back(fHand);}}
 }
 
 
@@ -843,7 +851,8 @@ void BoxQuantization::get_ktilde_matrix(double E_over_mref, RealSymmetricMatrix&
        else{
           double kres=evalptr->calculate(rt->getJtimestwo(),
                           rt->getL(),rt->getStimestwo(),rt->getChannelIndex(),
-                          ct->getL(),ct->getStimestwo(),ct->getChannelIndex(),Ecm); 
+                          ct->getL(),ct->getStimestwo(),ct->getChannelIndex(),Ecm,
+			  m_qcmsqFcts);
           assign(kres,row,col,herm,Kh,K);}
        }}
 }

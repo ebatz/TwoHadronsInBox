@@ -183,7 +183,8 @@ void KtildeMatrixCalculator::setKtildeParameters(const std::vector<double>& kapp
 double KtildeMatrixCalculator::calculate(uint Jtimestwo, 
                        uint Lp, uint Sptimestwo, uint chanp,
                        uint L, uint Stimestwo, uint chan, 
-                       double Ecm_over_mref) const
+                       double Ecm_over_mref,
+		       const std::vector<std::function<double(double)>>& qSqFcts) const
 {
  if (m_kappa_params.size()<m_paraminfo.size())
     throw(std::invalid_argument("Insufficient number of parameter values in KtildeMatrixCalculator::calculate"));
@@ -361,7 +362,8 @@ void KtildeInverseCalculator::setKtildeParameters(const std::vector<double>& kap
 double KtildeInverseCalculator::calculate(uint Jtimestwo, 
                        uint Lp, uint Sptimestwo, uint chanp,
                        uint L, uint Stimestwo, uint chan, 
-                       double Ecm_over_mref) const
+                       double Ecm_over_mref,
+		       const std::vector<std::function<double(double)>>& qSqFcts) const
 {
  if (m_kappa_params.size()<m_paraminfo.size())
     throw(std::invalid_argument("Insufficient number of parameter values in KtildeInverseCalculator::calculate"));

@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 #include <complex>
+#include <functional>
 #include "cmframe.h"
 #include "xml_handler.h"
 #include "box_matrix.h"
@@ -399,6 +400,7 @@ class BoxQuantization
     std::set<BoxQuantBasisState> m_basis;
     std::list<std::pair<BoxMatrix*,uint> > m_boxes;
     std::list<WZetaRGLCalculator*> m_wzetas;
+    std::vector< std::function<double(double)> > m_qcmsqFcts;
 
     KtildeMatrixBase* m_Kptr;
     bool m_KInvMode;
@@ -476,6 +478,10 @@ class BoxQuantization
 
 
     double getEcmOverMrefFromElab(double Elab_over_mref) const;
+
+    std::vector< std::function<double(double)> > getQcmSqFunctions() const {
+      return m_qcmsqFcts;
+    }
 
     void getBoxMatrixFromElab(double Elab_over_mref, ComplexHermitianMatrix& B);
 

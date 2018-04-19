@@ -116,7 +116,8 @@ class KtildeMatrixCalculator : public KtildeMatrixBase
     double calculate(uint Jtimestwo, 
                      uint Lp, uint Sptimestwo, uint chanp,
                      uint L, uint Stimestwo, uint chan,
-                     double Ecm_over_mref) const;
+                     double Ecm_over_mref,
+		     const std::vector<std::function<double(double)>>& qSqFcts) const;
 
     bool isZero(uint Jtimestwo, 
                 uint Lp, uint Sptimestwo, uint chanp,
@@ -183,7 +184,8 @@ class KtildeInverseCalculator : public KtildeMatrixBase
     double calculate(uint Jtimestwo, 
                      uint Lp, uint Sptimestwo, uint chanp,
                      uint L, uint Stimestwo, uint chan,
-                     double Ecm_over_mref) const;
+                     double Ecm_over_mref,
+		     const std::vector<std::function<double(double)>>& qSqFcts) const;
 
     bool isZero(uint Jtimestwo, 
                 uint Lp, uint Sptimestwo, uint chanp,
